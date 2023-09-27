@@ -38,39 +38,59 @@ class _MyAppState extends State<MyApp> {
             );
           },
         ),
-        floatingActionButton: AddQuestionFAB(
-          onPressed: () => _addQuestion(),
-        ),
+        floatingActionButton: const RandomQuestionFAB(),
       ),
     );
   }
-
-  void _addQuestion() {
-    setState(() {
-      int randomIndex = Random().nextInt(questionList.length);
-      Question newQuestion = questionList[randomIndex];
-      questionList.add(newQuestion);
-    });
-  }
 }
 
-class AddQuestionFAB extends StatelessWidget {
-  final Function() onPressed;
-  const AddQuestionFAB({super.key, required this.onPressed});
+class RandomQuestionFAB extends StatefulWidget {
+  const RandomQuestionFAB({super.key});
+
+  @override
+  State<RandomQuestionFAB> createState() => _RandomQuestionFABState();
+}
+
+class _RandomQuestionFABState extends State<RandomQuestionFAB> {
+  final questionList = Question.questionList;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        onPressed();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Question Added!")));
+        Navigator.push(
+            context,
+            _questionDetailRouter(
+                questionList[Random().nextInt(questionList.length)]));
       },
       child: Image.asset(
         "assets/plus.png",
         height: 24,
         width: 24,
       ),
+    );
+  }
+
+  Route _questionDetailRouter(Question question) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          QuestionDetail(question: question),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeOut;
+
+        final tween = Tween(begin: begin, end: end);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        );
+
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      },
     );
   }
 }
@@ -108,12 +128,11 @@ class QuestionListView extends StatelessWidget {
       pageBuilder: (context, animation, secondaryAnimation) =>
           QuestionDetail(question: question),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.easeOut;
-
-        final tween = Tween(begin: begin, end: end);
-        final curvedAnimation = CurvedAnimation(parent: animation, curve: curve);
+        final tween = Tween(begin: const Offset(1.0, 0.0), end: Offset.zero);
+        final curvedAnimation = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOut,
+        );
 
         return SlideTransition(
           position: tween.animate(curvedAnimation),
