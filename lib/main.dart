@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:task_f2/ui/screens/question_detail.dart';
 import 'data/model/question.dart';
 import 'ui/widgets/question_widget.dart';
 
@@ -78,8 +79,11 @@ class QuestionListView extends StatelessWidget {
   final List<Question> questionList;
   final bool isPortrait;
 
-  const QuestionListView(
-      {super.key, required this.questionList, required this.isPortrait});
+  const QuestionListView({
+    super.key,
+    required this.questionList,
+    required this.isPortrait,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +93,33 @@ class QuestionListView extends StatelessWidget {
       itemBuilder: (context, index) => QuestionWidget(
         question: questionList[index],
         isPortrait: isPortrait,
+        onQuestionPressed: (Question question) => {
+          Navigator.push(
+            context,
+            _questionDetailRouter(question),
+          )
+        },
       ),
+    );
+  }
+
+  Route _questionDetailRouter(Question question) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          QuestionDetail(question: question),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeOut;
+
+        final tween = Tween(begin: begin, end: end);
+        final curvedAnimation = CurvedAnimation(parent: animation, curve: curve);
+
+        return SlideTransition(
+          position: tween.animate(curvedAnimation),
+          child: child,
+        );
+      },
     );
   }
 }
