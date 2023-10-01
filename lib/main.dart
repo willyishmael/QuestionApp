@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'data/model/question.dart';
+import 'ui/screens/add_question.dart';
 import 'ui/screens/home.dart';
 
 void main() {
@@ -47,7 +48,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: <Widget>[
           Home(questionList: questionList),
-          const Center(child: Text('masih kosong beb'),),
+          AddQuestion(questionList: questionList,),
         ][currentPageIndex],
       ),
     );
