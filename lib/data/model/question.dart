@@ -117,15 +117,12 @@ class Question {
 }
 
 enum QuestionCategory {
-  general('assets/border-all.png'),
-  sports('assets/basketball.png'),
-  music('assets/music-alt.png');
+  general(Icons.newspaper),
+  sports(Icons.sports_basketball),
+  music(Icons.music_note);
 
-  const QuestionCategory(this.imagePath);
-  final String imagePath;
+  const QuestionCategory(this.icon);
+  final IconData icon;
 
-  Image getImage(Color color) => Image.asset(
-        imagePath,
-        color: color,
-      );
+  Icon getImage(Color color) => Icon(icon, color: color,);
 }
