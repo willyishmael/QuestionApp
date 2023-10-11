@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:task_f2/data/model/question.dart';
 
 class AddQuestion extends StatefulWidget {
-  final List<Question> questionList;
+  final Function(Question) onSubmit;
 
   const AddQuestion({
     super.key,
-    required this.questionList,
+    required this.onSubmit,
   });
 
   @override
@@ -17,14 +17,21 @@ class _AddQuestionState extends State<AddQuestion> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController categoryController = TextEditingController();
 
-  late final QuestionCategory _category;
-  late final String _question;
-  late final String _firstHint;
-  late final String _secondHint;
-  late final String _answer;
+  QuestionCategory _category = QuestionCategory.general;
+  String _question = "";
+  String _firstHint = "";
+  String _secondHint = "";
+  String _answer = "";
 
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
+  void _submitForm(BuildContext context) {
+    if (!_formKey.currentState!.validate()) {
+      _showSnackBar(context, 'Form Error');
+    } else if (_question.isEmpty ||
+        _firstHint.isEmpty ||
+        _secondHint.isEmpty ||
+        _answer.isEmpty) {
+      _showSnackBar(context, 'One or more required field is empty!');
+    } else {
       Question newQuestion = Question(
         category: _category,
         question: _question,
@@ -32,8 +39,22 @@ class _AddQuestionState extends State<AddQuestion> {
         answer: _answer,
       );
 
-      widget.questionList.add(newQuestion);
+      widget.onSubmit(newQuestion);
+
+      _formKey.currentState!.reset();
+      _category = QuestionCategory.general;
+
+      _showSnackBar(context, 'A question added!');
     }
+  }
+
+  void _showSnackBar(BuildContext context, String message, [int seconds = 3]) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: seconds),
+      ),
+    );
   }
 
   @override
@@ -122,7 +143,7 @@ class _AddQuestionState extends State<AddQuestion> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
-                      onPressed: () => _submitForm,
+                      onPressed: () => _submitForm(context),
                       child: const Text('Add Question'),
                     ),
                   ],
