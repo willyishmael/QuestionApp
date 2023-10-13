@@ -41,32 +41,54 @@ class _QuestionDetailState extends State<QuestionDetail> {
               color: const Color.fromARGB(255, 201, 210, 236),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (labelText.isNotEmpty)
-                Text(
-                  labelText,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                if (bodyText.isNotEmpty)
-                Text(
-                  bodyText,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                if (showButton)
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    child: TextButton(
-                      onPressed: _nextButtonPressed,
-                      child: Text(buttonText),
-                    ),
-                  )
-              ],
-            ),
+            child: hint(context),
           ),
         ],
       ),
+    );
+  }
+
+  Column hint(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedCrossFade(
+          firstChild: const SizedBox.shrink(),
+          secondChild: Text(
+            labelText,
+            style: textTheme.labelLarge,
+          ),
+          crossFadeState: labelText.isNotEmpty
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          duration: const Duration(seconds: 1),
+        ),
+        AnimatedCrossFade(
+          firstChild: const SizedBox.shrink(),
+          secondChild: Text(
+            bodyText,
+            style: textTheme.bodyLarge,
+          ),
+          crossFadeState: bodyText.isNotEmpty
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          duration: const Duration(seconds: 1),
+        ),
+        AnimatedCrossFade(
+          firstChild: const SizedBox.shrink(),
+          secondChild: Container(
+            alignment: Alignment.bottomRight,
+            child: TextButton(
+              onPressed: _nextButtonPressed,
+              child: Text(buttonText),
+            ),
+          ),
+          crossFadeState:
+              showButton ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          duration: const Duration(seconds: 1),
+        ),
+      ],
     );
   }
 
