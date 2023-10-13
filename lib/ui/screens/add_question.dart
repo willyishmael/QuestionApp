@@ -103,7 +103,6 @@ class _AddQuestionState extends State<AddQuestion> {
                     border: outlineInputBorder,
                     labelText: 'Question',
                   ),
-                  keyboardType: TextInputType.multiline,
                   onChanged: (value) {
                     _question = value;
                   },
