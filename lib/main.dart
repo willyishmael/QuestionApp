@@ -32,31 +32,73 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Scaffold(
-        appBar: AppBar(title: const Text("Questions App")),
-        bottomNavigationBar: NavigationBar(
-          onDestinationSelected: (int index) {
-            setState(() {
-              currentPageIndex = index;
-            });
-          },
-          selectedIndex: currentPageIndex,
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.add),
-              label: 'Add Question',
-            ),
-          ],
+      home: LayoutBuilder(builder: (context, constraints) {
+        bool isPortrait =
+            constraints.maxWidth < constraints.maxHeight ? true : false;
+        return Scaffold(
+          appBar: AppBar(title: const Text("Questions App")),
+          bottomNavigationBar:
+              isPortrait ? _getBottomNavigationBar() : const SizedBox(),
+          body: Row(
+            children: [
+              isPortrait ? const SizedBox() : _getNavigationRail(),
+              Expanded(
+                child: routes[currentPageIndex],
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  List<Widget> get routes {
+    return <Widget>[
+      Home(questionList: questionList),
+      AddQuestion(onSubmit: (question) => _onSubmitAddQuestion(question)),
+    ];
+  }
+
+  NavigationBar _getBottomNavigationBar() {
+    return NavigationBar(
+      onDestinationSelected: (int index) {
+        setState(() {
+          currentPageIndex = index;
+        });
+      },
+      selectedIndex: currentPageIndex,
+      destinations: const [
+        NavigationDestination(
+          icon: Icon(Icons.home),
+          label: 'Home',
         ),
-        body: <Widget>[
-          Home(questionList: questionList),
-          AddQuestion(onSubmit: (question) => _onSubmitAddQuestion(question)),
-        ][currentPageIndex],
-      ),
+        NavigationDestination(
+          icon: Icon(Icons.add),
+          label: 'Add Question',
+        ),
+      ],
+    );
+  }
+
+  NavigationRail _getNavigationRail() {
+    return NavigationRail(
+      onDestinationSelected: (int index) {
+        setState(() {
+          currentPageIndex = index;
+        });
+      },
+      groupAlignment: -1.0,
+      selectedIndex: currentPageIndex,
+      destinations: const [
+        NavigationRailDestination(
+          icon: Icon(Icons.home),
+          label: Text('Home'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Icons.add),
+          label: Text('Add Question'),
+        ),
+      ],
     );
   }
 }
