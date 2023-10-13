@@ -87,7 +87,7 @@ class _MyAppState extends State<MyApp> {
           currentPageIndex = index;
         });
       },
-      groupAlignment: -1.0,
+      groupAlignment: 0,
       selectedIndex: currentPageIndex,
       destinations: const [
         NavigationRailDestination(
