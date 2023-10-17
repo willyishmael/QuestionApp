@@ -3,14 +3,9 @@ import 'package:flutter/material.dart';
 import '../../data/model/question.dart';
 import '../screens/question_detail.dart';
 
-class RandomQuestionFAB extends StatefulWidget {
-  const RandomQuestionFAB({super.key});
+class RandomQuestionFAB extends StatelessWidget {
+  RandomQuestionFAB({super.key});
 
-  @override
-  State<RandomQuestionFAB> createState() => _RandomQuestionFABState();
-}
-
-class _RandomQuestionFABState extends State<RandomQuestionFAB> {
   final questionList = Question.questionList;
 
   @override

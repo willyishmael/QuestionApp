@@ -18,12 +18,6 @@ class _MyAppState extends State<MyApp> {
   final questionList = Question.questionList;
   int currentPageIndex = 0;
 
-  void _onSubmitAddQuestion(Question question) {
-    setState(() {
-      questionList.add(question);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -50,6 +44,12 @@ class _MyAppState extends State<MyApp> {
         );
       }),
     );
+  }
+
+  void _onSubmitAddQuestion(Question question) {
+    setState(() {
+      questionList.add(question);
+    });
   }
 
   List<Widget> get routes {

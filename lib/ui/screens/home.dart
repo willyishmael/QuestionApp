@@ -15,7 +15,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: const RandomQuestionFAB(),
+      floatingActionButton: RandomQuestionFAB(),
       body: LayoutBuilder(
         builder: (context, constraints) {
           bool isPortrait =

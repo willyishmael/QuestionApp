@@ -23,40 +23,6 @@ class _AddQuestionState extends State<AddQuestion> {
   String _secondHint = "";
   String _answer = "";
 
-  void _submitForm(BuildContext context) {
-    if (!_formKey.currentState!.validate()) {
-      _showSnackBar(context, 'Form Error');
-    } else if (_question.isEmpty ||
-        _firstHint.isEmpty ||
-        _secondHint.isEmpty ||
-        _answer.isEmpty) {
-      _showSnackBar(context, 'One or more required field is empty!');
-    } else {
-      Question newQuestion = Question(
-        category: _category,
-        question: _question,
-        hints: [_firstHint, _secondHint],
-        answer: _answer,
-      );
-
-      widget.onSubmit(newQuestion);
-
-      _formKey.currentState!.reset();
-      _category = QuestionCategory.general;
-
-      _showSnackBar(context, 'A question added!');
-    }
-  }
-
-  void _showSnackBar(BuildContext context, String message, [int seconds = 3]) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        duration: Duration(seconds: seconds),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     const outlineInputBorder =
@@ -151,6 +117,40 @@ class _AddQuestionState extends State<AddQuestion> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _submitForm(BuildContext context) {
+    if (!_formKey.currentState!.validate()) {
+      _showSnackBar(context, 'Form Error');
+    } else if (_question.isEmpty ||
+        _firstHint.isEmpty ||
+        _secondHint.isEmpty ||
+        _answer.isEmpty) {
+      _showSnackBar(context, 'One or more required field is empty!');
+    } else {
+      Question newQuestion = Question(
+        category: _category,
+        question: _question,
+        hints: [_firstHint, _secondHint],
+        answer: _answer,
+      );
+
+      widget.onSubmit(newQuestion);
+
+      _formKey.currentState!.reset();
+      _category = QuestionCategory.general;
+
+      _showSnackBar(context, 'A question added!');
+    }
+  }
+
+  void _showSnackBar(BuildContext context, String message, [int seconds = 3]) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: seconds),
       ),
     );
   }
